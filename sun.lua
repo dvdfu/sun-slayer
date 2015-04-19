@@ -14,7 +14,7 @@ function Sun:initialize()
 	self.fire:setColors(255, 255, 0, 255, 255, 128, 0, 255)
 	self.fire:setSizes(2, 1)
 	self.fire:setEmissionRate(400)
-	self.fire:setPosition(self.x + self.w/2, self.y + self.h/2)
+	self.fire:setPosition(self.x, self.y)
 end
 
 function Sun:update(dt)
@@ -22,7 +22,7 @@ function Sun:update(dt)
 end
 
 function Sun:draw()
-	love.graphics.draw(self.sprite, self.x, self.y)
+	love.graphics.draw(self.sprite, self.x - self.w/2, self.y - self.h/2)
 
 	love.graphics.setBlendMode('additive')
 	love.graphics.draw(self.fire)

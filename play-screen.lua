@@ -18,8 +18,9 @@ end
 function PlayScreen:update(dt)
 	local cx, cy = cam:pos()
     local dx, dy = hydrant.x - cx, hydrant.y - cy
-    dx, dy = dx/20, dy/20
+    dx, dy = dx/10, dy/10
     cam:move(dx, dy)
+    cam.scale = 1/(1-(hydrant.y + hydrant.h)/600)
 
 	hydrant:update(dt)
 	sun1:update(dt)
@@ -27,6 +28,7 @@ end
 
 function PlayScreen:draw()
 	cam:draw(camDraw)
+	hydrant:drawUI()
 end
 
 function camDraw()
