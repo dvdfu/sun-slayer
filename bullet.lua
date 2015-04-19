@@ -39,6 +39,7 @@ function Bullet:update(dt)
 	delta = Vector(moon.x - self.x, moon.y - self.y)
 	if delta:len() < moon.r/2 and not self.dead then
 		moon.vx, moon.vy = moon.vx + self.vx/20, moon.vy + self.vy/20
+		moon.vx, moon.vy = math.min(moon.vx, 12), math.min(moon.vy, 12)
 		self.dead = true
 	end
 
@@ -54,7 +55,7 @@ function Bullet:update(dt)
 		end
 	end
 
-	if self.y > 0 or self.deadTimer > 3 then
+	if self.y > 0 or self.deadTimer > 2 then
 		self.dead = true
 	end
 end

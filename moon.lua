@@ -4,7 +4,7 @@ Moon = Class('Moon')
 
 function Moon:initialize()
 	self.sprite = love.graphics.newImage('img/moon.png')
-	self.x, self.y = -400, -1600
+	self.x, self.y = -600, -1600
 	self.vx, self.vy = 0, 0
 	self.size = 80
 	self.r = 240
@@ -16,13 +16,13 @@ function Moon:update(dt)
 	if delta:len() < self.r/2 + 16 then
 		local landx, landy = (delta:normalized()*(self.r/2 + 16)):unpack()
 		hydrant.x, hydrant.y = self.x + landx, self.y + landy
+		hydrant.vx, hydrant.vy = 0, 0
 		if love.keyboard.isDown('up') then
-			hydrant.vx, hydrant.vy = -hydrant.vx*1, -hydrant.vy*1
 			return
 		end
 		hydrant.onMoon = true
 		hydrant.angle = math.atan2(landy, landx) + math.pi/2
-		hydrant.vx, hydrant.vy = 0, 0
+		self.vx, self.vy = 0, 0
 	end
 
 	if self.y + self.r/2 > 0 then

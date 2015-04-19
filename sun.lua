@@ -5,7 +5,7 @@ Sun = Class('Sun')
 
 function Sun:initialize()
 	self.sprite = love.graphics.newImage('img/sun.png')
-	self.x, self.y = 3000, -3000
+	self.x, self.y = 4000, -3000
 	self.size = 160
 	self.r = 1024
 	self.hits = 0
@@ -37,6 +37,8 @@ function Sun:initialize()
 	self.trail:setSpread(math.pi/12)
 	self.trail:setColors(255, 255, 0, 255, 255, 128, 0, 255, 255, 0, 0, 255, 40, 40, 40, 255)
 	self.trail:setSizes(14, 2)
+
+	self.explodeSound = love.audio.newSource("aud/explode2.wav")
 end
 
 function Sun:update(dt)
@@ -52,6 +54,8 @@ function Sun:update(dt)
 		self.trail:emit(1)
 
 		if fireball.dead then
+			self.explodeSound:stop()
+			self.explodeSound:play()
 			table.remove(self.fireballs, i)
 			self.explosion:setPosition(fireball.x, fireball.y)
 			self.explosion:emit(300)
@@ -75,7 +79,7 @@ function Sun:update(dt)
 		end
 	end
 
-	if self.hits > 20 and textKey == 'water' then
+	if self.hits > 50 and textKey == 'water' then
 		showText = true
 		textComplete = true
 		text = 'Keep shooting, it\'s working!\n...I think?'
@@ -86,7 +90,7 @@ function Sun:update(dt)
 		end)
 	end
 
-	if self.hits > 30 and textKey == 'confused' then
+	if self.hits > 100 and textKey == 'confused' then
 		showText = true
 		textComplete = true
 		text = 'We need a LOT more water...'

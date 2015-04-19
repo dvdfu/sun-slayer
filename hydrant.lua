@@ -9,7 +9,7 @@ function Hydrant:initialize()
 	self.canShoot = true
 	self.shootTimer = Timer.new()
 	self.respawnTimer = Timer.new()
-	self.waterMax = 1600
+	self.waterMax = 2000
 	self:reset()
 
 	self.sprite = love.graphics.newImage('img/hydrant.png')
@@ -35,6 +35,7 @@ function Hydrant:initialize()
 	self.shootSound = love.audio.newSource("aud/shoot.wav")
 	self.flySound = love.audio.newSource("aud/fly.wav")
 	self.explodeSound = love.audio.newSource("aud/explode.wav")
+	self.hitSound = love.audio.newSource("aud/hit.wav")
 end
 
 function Hydrant:update(dt)
@@ -44,9 +45,11 @@ function Hydrant:update(dt)
 		bullet:update(dt)
 		if bullet.dead then
 			table.remove(self.bullets, i)
-			if bullet.deadTimer < 3 then
+			if bullet.deadTimer < 2 then
 				self.blast:setPosition(bullet.x, bullet.y)
 				self.blast:emit(4)
+				self.hitSound:stop()
+				self.hitSound:play()
 			end
 		end
 	end

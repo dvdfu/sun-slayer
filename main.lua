@@ -13,8 +13,6 @@ function screens:exitScreen()
 		screens[screenNum]:onClose()
 		screens[screenNum] = nil
 		screenNum = screenNum - 1
-	else
-		love.event.push('quit')
 	end
 end
 
@@ -39,7 +37,7 @@ end
 function love.update(dt)
 	screens[screenNum]:update(dt)
 	if love.keyboard.isDown('escape') then
-		screens:exitScreen()
+		love.event.push('quit')
 	end
 end
 
