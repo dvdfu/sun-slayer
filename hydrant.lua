@@ -14,7 +14,6 @@ function Hydrant:initialize()
 
 	self.sprite = love.graphics.newImage('img/hydrant.png')
 
-	local part = love.graphics.newImage('img/part.png')
 	self.spout = love.graphics.newParticleSystem(part, 5000)
 	self.spout:setAreaSpread('normal', 0.5, 0.5)
 	self.spout:setParticleLifetime(0.1, 0.2)

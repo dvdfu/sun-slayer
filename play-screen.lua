@@ -9,6 +9,10 @@ Sun = require 'sun'
 sw, sh = love.graphics.getWidth(), love.graphics.getHeight()
 
 function PlayScreen:initialize()
+	part = love.graphics.newImage('img/part.png')
+	font = love.graphics.newFont('data/red-alert.ttf', 26)
+	love.graphics.setFont(font)
+
 	cam = Camera:new()
 	hydrant = Hydrant:new()
 	cam:lookAt(hydrant.x, hydrant.y)
@@ -25,7 +29,7 @@ function PlayScreen:update(dt)
     cam:move(dx, dy)
 
     local height = -(hydrant.y + hydrant.h)
-    local ds = 1/(1 + height/600) - cam.scale
+    local ds = 1/(1 + height/1000) - cam.scale
     cam.scale = cam.scale + ds/10
     if height < 1000 then
 		love.graphics.setBackgroundColor(45 - 45*height/1000, 70 - 70*height/1000, 100 - 100*height/1000)
@@ -51,6 +55,8 @@ function PlayScreen:draw()
 		local angle = math.atan2(dy, dx)
 		love.graphics.draw(indicatorSpr, sw/2 - 160*math.cos(angle), sh/2 - 160*math.sin(angle), angle - math.pi/2, 1, 1, 8, 8)
 	end
+
+	love.graphics.print('ayyy lmao', sw/2, sh/2 + 160)
 end
 
 function camDraw()

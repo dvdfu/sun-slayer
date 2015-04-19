@@ -3,7 +3,6 @@ Timer = require 'lib.timer'
 Bullet = Class('Bullet')
 
 Bullet.static.sprite = love.graphics.newImage('img/water.png')
-Bullet.static.part = love.graphics.newImage('img/part.png')
 
 function Bullet:initialize(x, y, angle)
 	self.x, self.y = x, y
@@ -14,7 +13,7 @@ function Bullet:initialize(x, y, angle)
 	self.dead = false
 	self.deadTimer = 0
 
-	self.spout = love.graphics.newParticleSystem(Bullet.static.part, 5000)
+	self.spout = love.graphics.newParticleSystem(part, 5000)
 	self.spout:setParticleLifetime(0.05, 0.1)
 	self.spout:setColors(128, 255, 255, 255, 0, 128, 255, 255)
 	self.spout:setSizes(1.5, 0.5)
