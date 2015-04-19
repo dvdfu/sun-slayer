@@ -14,6 +14,8 @@ function PlayScreen:initialize()
 	font = love.graphics.newFont('data/red-alert.ttf', 26)
 	love.graphics.setFont(font)
 
+	showChat = true
+
 	cam = Camera:new()
 	hydrant = Hydrant:new()
 	cam:lookAt(hydrant.x, hydrant.y)
@@ -31,14 +33,15 @@ function PlayScreen:update(dt)
     local dx, dy = hydrant.x - cx, hydrant.y - cy
     dx, dy = dx/10, dy/10
     cam:move(dx, dy)
+    cam.y = math.min(cam.y, -96)
 
     local height = -cam.y
     local ds = 1/(1 + height/1500) - cam.scale
     cam.scale = cam.scale + ds/10
     if height < 1500 then
-		love.graphics.setBackgroundColor(45 - 45*height/1500, 80 - 80*height/1500, 120 - 120*height/1500)
+		love.graphics.setBackgroundColor(45 - 35*height/1500, 80 - 80*height/1500, 120 - 100*height/1500)
 	else
-		love.graphics.setBackgroundColor(0, 0, 0)
+		love.graphics.setBackgroundColor(10, 0, 20)
 	end
 
 	hydrant:update(dt)
@@ -71,8 +74,10 @@ function PlayScreen:draw()
 		love.graphics.draw(indicatorSpr, sw/2 - 160*math.cos(angle), sh/2 - 160*math.sin(angle), angle - math.pi/2, 1, 1, 8, 8)
 	end
 
-	local text = 'ayy lmao'
-	love.graphics.print(text, sw/2 - font:getWidth(text)/2, sh - 100)
+	if showChat then
+		local text = 'ayy lmao'
+		love.graphics.print(text, sw/2 - font:getWidth(text)/2, sh - 100)
+	end
 end
 
 function camDraw()
@@ -81,7 +86,8 @@ function camDraw()
 	sun:draw()
 
 	-- love.graphics.rectangle('fill', -1000, 0, 2000, 800)
-	for i = -2000, 2000, 32 do
+	local left = math.floor(cam.x/32)*32 - sw/2 - 64
+	for i = left, left + sw + 128, 32 do
 		love.graphics.draw(soilSpr, i, 0, 0, 2, 2)
 	end
 	for i = -96, 96, 16 do

@@ -2,10 +2,10 @@ Vector = require 'lib.vector'
 
 Fireball = Class('Fireball')
 
-Fireball.static.size = 160
+Fireball.static.size = 60
 
 function Fireball:initialize(x, y, radius)
-	self.sprite = love.graphics.newImage('img/sun.png')
+	self.sprite = love.graphics.newImage('img/fireball.png')
 	self.x, self.y = x, y
 	self.vx, self.vy = 0, 0
 	self.r = 120

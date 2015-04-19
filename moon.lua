@@ -12,8 +12,8 @@ end
 
 function Moon:update(dt)
 	local delta = Vector(hydrant.x - self.x, hydrant.y - self.y)
-	if delta:len() < self.r/2 + 16 then
-		local landx, landy = (delta:normalized()*(self.r/2 + 16)):unpack()
+	if delta:len() < self.r/2 then
+		local landx, landy = (delta:normalized()*self.r/2):unpack()
 		hydrant.x, hydrant.y = self.x + landx, self.y + landy
 		self.vx, self.vy = hydrant.vx*1.1, hydrant.vy*1.1
 		hydrant.vx, hydrant.vy = 0, 0

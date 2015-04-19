@@ -13,13 +13,13 @@ function Sun:initialize()
 	self.fireballTimer = Timer.new()
 	self.fireballReady = true
 
-	self.fire = love.graphics.newParticleSystem(part, 5000)
-	self.fire:setParticleLifetime(0.6, 0.6)
-	self.fire:setSpeed(50, 200)
+	self.fire = love.graphics.newParticleSystem(self.sprite, 500)
+	self.fire:setParticleLifetime(0.1, 0.3)
+	self.fire:setSpeed(10, 200)
 	self.fire:setSpread(math.pi*2)
-	self.fire:setColors(255, 255, 0, 255, 255, 128, 0, 255)
-	self.fire:setSizes(2, 1)
-	self.fire:setEmissionRate(400)
+	self.fire:setColors(255, 255, 0, 255, 255, 128, 0, 255, 255, 0, 0, 0)
+	self.fire:setSizes(6, 7)
+	self.fire:setEmissionRate(20)
 	self.fire:setPosition(self.x, self.y)
 
 	self.explosion = love.graphics.newParticleSystem(part, 5000)
@@ -76,7 +76,6 @@ function Sun:update(dt)
 end
 
 function Sun:draw()
-	-- love.graphics.draw(self.fire)
 	love.graphics.setBlendMode('additive')
 	love.graphics.draw(self.trail)
 	love.graphics.setBlendMode('alpha')
@@ -87,6 +86,7 @@ function Sun:draw()
 
 	love.graphics.draw(self.sprite, self.x, self.y, 0, self.r/self.size, self.r/self.size, self.size/2, self.size/2)
 	love.graphics.setBlendMode('additive')
+	love.graphics.draw(self.fire)
 	love.graphics.draw(self.explosion)
 	love.graphics.setBlendMode('alpha')
 end
