@@ -1,10 +1,20 @@
+Timer = require 'lib.timer'
+Fireball = require 'fireball'
+
 Sun = Class('Sun')
 
 function Sun:initialize()
 	self.sprite = love.graphics.newImage('img/sun.png')
-	self.x, self.y = 1000, -1000
+	self.x, self.y = 600, -1600
 	self.size = 160
 	self.r = 640
+
+	self.fireballs = {}
+	self.fireballTimer = Timer.new()
+	self.fireballTimer.addPeriodic(5, function()
+		local fireball = Fireball:new(self.x, self.y)
+		table.insert(self.fireballs, fireball)
+	end)
 
 	local part = love.graphics.newImage('img/part.png')
 	self.fire = love.graphics.newParticleSystem(part, 5000)
@@ -18,7 +28,15 @@ function Sun:initialize()
 end
 
 function Sun:update(dt)
+	self.fireballTimer.update(dt)
 	self.fire:update(dt)
+
+	for i, fireball in pairs(self.fireballs) do
+		fireball:update(dt)
+		if fireball.dead then
+			table.remove(self.fireballs, i)
+		end
+	end
 
 	local dx, dy = self.x - hydrant.x, self.y - hydrant.y
 	local dist = math.sqrt(dx*dx + dy*dy) - self.r/2
@@ -42,6 +60,10 @@ function Sun:draw()
 	love.graphics.setBlendMode('additive')
 	love.graphics.draw(self.fire)
 	love.graphics.setBlendMode('alpha')
+
+	for _, fireball in pairs(self.fireballs) do
+		fireball:draw()
+	end
 end
 
 return Sun

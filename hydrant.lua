@@ -13,7 +13,6 @@ function Hydrant:initialize()
 	self:reset()
 
 	self.sprite = love.graphics.newImage('img/hydrant.png')
-	self.indicator = love.graphics.newImage('img/indicator.png')
 
 	local part = love.graphics.newImage('img/part.png')
 	self.spout = love.graphics.newParticleSystem(part, 5000)
@@ -127,22 +126,6 @@ function Hydrant:draw()
 	end
 	if not self.dead then
 		love.graphics.draw(self.sprite, self.x, self.y, self.angle, 1, 1, self.w/2, self.h/2)
-	end
-end
-
-function Hydrant:drawUI()
-	local sw, sh = love.graphics.getWidth(), love.graphics.getHeight()
-
-	love.graphics.setColor(128, 255, 255)
-	love.graphics.rectangle('fill', 16, 16, 100*self.water/self.waterMax, 8)
-	love.graphics.rectangle('line', 16, 16, 100, 8)
-	love.graphics.setColor(255, 255, 255)
-
-	local dx, dy = self.x - sun.x, self.y - sun.y
-	local dist = math.sqrt(dx*dx + dy*dy) - sun.r
-	if dist > 300 then
-		local angle = math.atan2(dy, dx)
-		love.graphics.draw(self.indicator, sw/2 - 100*math.cos(angle), sh/2 - 100*math.sin(angle), angle - math.pi/2, 1, 1, 8, 8)
 	end
 end
 
