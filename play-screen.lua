@@ -4,23 +4,23 @@ Flux = require 'lib.flux'
 
 PlayScreen = Class('PlayScreen')
 Hydrant = require 'hydrant'
-
-groundLevel = 400
+Sun = require 'sun'
 
 function PlayScreen:initialize()
-	hydrant = Hydrant:new()
 	cam = Camera:new()
+	hydrant = Hydrant:new()
 	cam:lookAt(hydrant.x, hydrant.y)
+	sun1 = Sun:new()
 end
 
 function PlayScreen:update(dt)
 	local cx, cy = cam:pos()
     local dx, dy = hydrant.x - cx, hydrant.y - cy
-    dx, dy = dx/2, dy/2
+    dx, dy = dx/20, dy/20
     cam:move(dx, dy)
-    -- cam:rotateTo(-hydrant.angle)
 
 	hydrant:update(dt)
+	sun1:update(dt)
 end
 
 function PlayScreen:draw()
@@ -28,6 +28,7 @@ function PlayScreen:draw()
 end
 
 function camDraw()
+	sun1:draw()
 	hydrant:draw()
 end
 
