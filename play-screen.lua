@@ -10,7 +10,7 @@ function PlayScreen:initialize()
 	cam = Camera:new()
 	hydrant = Hydrant:new()
 	cam:lookAt(hydrant.x, hydrant.y)
-	sun1 = Sun:new()
+	sun = Sun:new()
 
 	warningSpr = love.graphics.newImage('img/warning.png')
 end
@@ -23,17 +23,18 @@ function PlayScreen:update(dt)
     cam.scale = 1/(1-(hydrant.y + hydrant.h)/600)
 
 	hydrant:update(dt)
-	sun1:update(dt)
+	sun:update(dt)
 end
 
 function PlayScreen:draw()
 	cam:draw(camDraw)
 	hydrant:drawUI()
+	love.graphics.print(love.timer.getFPS(), 200, 200)
 end
 
 function camDraw()
-	sun1:draw()
 	hydrant:draw()
+	sun:draw()
 
 	love.graphics.rectangle('fill', -1000, 0, 2000, 800)
 	for i = 0, 16 do
