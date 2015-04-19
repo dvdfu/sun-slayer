@@ -33,7 +33,7 @@ function Bullet:update(dt)
 	local delta = Vector(sun.x - self.x, sun.y - self.y)
 	if delta:len() < sun.r/2 and not self.dead then
 		self.dead = true
-		-- sun.r = sun.r - 2
+		sun.hits = sun.hits + 1
 	end
 
 	delta = Vector(moon.x - self.x, moon.y - self.y)

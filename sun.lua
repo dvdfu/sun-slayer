@@ -5,9 +5,10 @@ Sun = Class('Sun')
 
 function Sun:initialize()
 	self.sprite = love.graphics.newImage('img/sun.png')
-	self.x, self.y = 1000, -3000
+	self.x, self.y = 3000, -3000
 	self.size = 160
 	self.r = 1024
+	self.hits = 0
 
 	self.fireballs = {}
 	self.fireballTimer = Timer.new()
@@ -72,6 +73,28 @@ function Sun:update(dt)
 				self.fireballReady = true
 			end)
 		end
+	end
+
+	if self.hits > 20 and textKey == 'water' then
+		showText = true
+		textComplete = true
+		text = 'Keep shooting, it\'s working!\n...I think?'
+		textTimer.add(4, function()
+			textKey = 'confused'
+			textComplete = false
+			showText = false
+		end)
+	end
+
+	if self.hits > 30 and textKey == 'confused' then
+		showText = true
+		textComplete = true
+		text = 'We need a LOT more water...'
+		textKey = 'moon'
+		textTimer.add(6, function()
+			textComplete = false
+			showText = false
+		end)
 	end
 end
 

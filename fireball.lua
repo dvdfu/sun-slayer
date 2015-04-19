@@ -10,7 +10,7 @@ function Fireball:initialize(x, y, radius)
 	self.vx, self.vy = 0, 0
 	self.r = 120
 	self.speed = self.r/8
-	self.hp = 6
+	self.hp = 3
 	self.hit = false
 	self.dead = false
 	self.angle = 0
