@@ -22,6 +22,8 @@ function PlayScreen:initialize()
 
 	warningSpr = love.graphics.newImage('img/warning.png')
 	indicatorSpr = love.graphics.newImage('img/indicator.png')
+	starSpr = love.graphics.newImage('img/stars.png')
+	soilSpr = love.graphics.newImage('img/soil.png')
 end
 
 function PlayScreen:update(dt)
@@ -30,11 +32,11 @@ function PlayScreen:update(dt)
     dx, dy = dx/10, dy/10
     cam:move(dx, dy)
 
-    local height = -(hydrant.y + hydrant.h)
-    local ds = 1/(1 + height/1000) - cam.scale
+    local height = -cam.y
+    local ds = 1/(1 + height/1500) - cam.scale
     cam.scale = cam.scale + ds/10
-    if height < 1000 then
-		love.graphics.setBackgroundColor(45 - 45*height/1000, 70 - 70*height/1000, 100 - 100*height/1000)
+    if height < 1500 then
+		love.graphics.setBackgroundColor(45 - 45*height/1500, 80 - 80*height/1500, 120 - 120*height/1500)
 	else
 		love.graphics.setBackgroundColor(0, 0, 0)
 	end
@@ -45,6 +47,13 @@ function PlayScreen:update(dt)
 end
 
 function PlayScreen:draw()
+	local height = -cam.y
+	if height < 1500 then
+		love.graphics.setColor(255, 255, 255, height*255/1500)
+	end
+	love.graphics.draw(starSpr, -cam.x/100, -cam.y/100, 0, 2, 2)
+	love.graphics.setColor(255, 255, 255, 255)
+
 	cam:draw(camDraw)
 
 	love.graphics.print(hydrant.water, 16, 8)
@@ -57,20 +66,13 @@ function PlayScreen:draw()
 
 	local dx, dy = hydrant.x - sun.x, hydrant.y - sun.y
 	local dist = math.sqrt(dx*dx + dy*dy) - sun.r
-	if dist > 300 then
+	if dist > 200 then
 		local angle = math.atan2(dy, dx)
 		love.graphics.draw(indicatorSpr, sw/2 - 160*math.cos(angle), sh/2 - 160*math.sin(angle), angle - math.pi/2, 1, 1, 8, 8)
 	end
 
-	-- local height = -(hydrant.y + hydrant.h/2)
-	-- height = height*height*height/92
-	-- if height < 1000 then
-	-- 	love.graphics.print(string.format('Altitude %i km', height), 16, 32)
-	-- elseif height < 1000000 then
-	-- 	love.graphics.print(string.format('Altitude %i thousand km', height/1000), 16, 32)
-	-- else
-	-- 	love.graphics.print(string.format('Altitude %i million km', height/1000000), 16, 32)
-	-- end
+	local text = 'ayy lmao'
+	love.graphics.print(text, sw/2 - font:getWidth(text)/2, sh - 100)
 end
 
 function camDraw()
@@ -78,9 +80,12 @@ function camDraw()
 	moon:draw()
 	sun:draw()
 
-	love.graphics.rectangle('fill', -1000, 0, 2000, 800)
-	for i = 0, 16 do
-		love.graphics.draw(warningSpr, (i - 8)*8 - 4, 0)
+	-- love.graphics.rectangle('fill', -1000, 0, 2000, 800)
+	for i = -2000, 2000, 32 do
+		love.graphics.draw(soilSpr, i, 0, 0, 2, 2)
+	end
+	for i = -96, 96, 16 do
+		love.graphics.draw(warningSpr,i - 8, 0, 0, 2, 2)
 	end
 end
 

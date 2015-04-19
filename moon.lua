@@ -4,10 +4,10 @@ Moon = Class('Moon')
 
 function Moon:initialize()
 	self.sprite = love.graphics.newImage('img/moon.png')
-	self.x, self.y = 0, -600
+	self.x, self.y = -400, -1000
 	self.vx, self.vy = 0, 0
 	self.size = 80
-	self.r = 160
+	self.r = 320
 end
 
 function Moon:update(dt)

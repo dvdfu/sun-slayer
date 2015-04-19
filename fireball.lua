@@ -10,7 +10,7 @@ function Fireball:initialize(x, y, radius)
 	self.vx, self.vy = 0, 0
 	self.r = 120
 	self.speed = self.r/8
-	self.hp = 10
+	self.hp = 6
 	self.hit = false
 	self.dead = false
 	self.angle = 0
@@ -36,6 +36,10 @@ function Fireball:update(dt)
 
 	local delta = Vector(moon.x - self.x, moon.y - self.y)
 	if delta:len() < moon.r/2 + self.r/2 then
+		self.dead = true
+	end
+
+	if self.y + self.r/2 > 0 then
 		self.dead = true
 	end
 

@@ -5,9 +5,9 @@ Sun = Class('Sun')
 
 function Sun:initialize()
 	self.sprite = love.graphics.newImage('img/sun.png')
-	self.x, self.y = 600, -2400
+	self.x, self.y = 1000, -3000
 	self.size = 160
-	self.r = 640
+	self.r = 1024
 
 	self.fireballs = {}
 	self.fireballTimer = Timer.new()
@@ -77,14 +77,18 @@ end
 
 function Sun:draw()
 	-- love.graphics.draw(self.fire)
+	love.graphics.setBlendMode('additive')
 	love.graphics.draw(self.trail)
+	love.graphics.setBlendMode('alpha')
 	
 	for _, fireball in pairs(self.fireballs) do
 		fireball:draw()
 	end
 
 	love.graphics.draw(self.sprite, self.x, self.y, 0, self.r/self.size, self.r/self.size, self.size/2, self.size/2)
+	love.graphics.setBlendMode('additive')
 	love.graphics.draw(self.explosion)
+	love.graphics.setBlendMode('alpha')
 end
 
 return Sun
