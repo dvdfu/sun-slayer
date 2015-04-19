@@ -63,20 +63,14 @@ function Sun:update(dt)
 	if dist < self.r/2 + 16 and not hydrant.dead then
 		hydrant:explode()
 	end
-	for i, bullet in pairs(hydrant.bullets) do
-		local dx, dy = self.x - bullet.x, self.y - bullet.y
-		local dist = math.sqrt(dx*dx + dy*dy)
-		if dist < self.r/2 and not bullet.dead then
-			bullet.dead = true
-			self.r = self.r - 2
-			if self.fireballReady then
-				local fireball = Fireball:new(self.x, self.y, self.r/8)
-				table.insert(self.fireballs, fireball)
-				self.fireballReady = false
-				self.fireballTimer.add(3, function()
-					self.fireballReady = true
-				end)
-			end
+	if dist < 1000 then
+		if self.fireballReady then
+			local fireball = Fireball:new(self.x, self.y, self.r/8)
+			table.insert(self.fireballs, fireball)
+			self.fireballReady = false
+			self.fireballTimer.add(3, function()
+				self.fireballReady = true
+			end)
 		end
 	end
 end

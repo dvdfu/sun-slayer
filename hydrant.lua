@@ -92,21 +92,21 @@ function Hydrant:update(dt)
 		self.vx = self.vx*0.95
 		self.vy = 0
 		self.angle = 0
-		if self.water + 20 < self.waterMax then
-			self.water = self.water + 20
+		if self.water + 19 < self.waterMax then
+			self.water = self.water + 19
 		else
 			self.water = self.waterMax
 		end
 	end
 
 	if love.keyboard.isDown('a') and not self.dead and self.y < -self.h then
-		if self.canShoot and self.water > 10 then
+		if self.canShoot and self.water > 9 then
 			d = Vector(0, -self.h/2)
 			d:rotate_inplace(self.angle)
 			local bullet = Bullet:new(self.x + d.x, self.y + d.y, self.angle + (math.random() - 0.5)*0.1)
 			table.insert(self.bullets, bullet)
 			
-			self.water = self.water - 10
+			self.water = self.water - 9
 			self.shootSound:stop()
 			self.shootSound:play()
 			self.canShoot = false

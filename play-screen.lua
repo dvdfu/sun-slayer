@@ -5,6 +5,7 @@ Flux = require 'lib.flux'
 PlayScreen = Class('PlayScreen')
 Hydrant = require 'hydrant'
 Sun = require 'sun'
+Moon = require 'moon'
 
 sw, sh = love.graphics.getWidth(), love.graphics.getHeight()
 
@@ -17,6 +18,7 @@ function PlayScreen:initialize()
 	hydrant = Hydrant:new()
 	cam:lookAt(hydrant.x, hydrant.y)
 	sun = Sun:new()
+	moon = Moon:new()
 
 	warningSpr = love.graphics.newImage('img/warning.png')
 	indicatorSpr = love.graphics.newImage('img/indicator.png')
@@ -39,14 +41,18 @@ function PlayScreen:update(dt)
 
 	hydrant:update(dt)
 	sun:update(dt)
+	moon:update(dt)
 end
 
 function PlayScreen:draw()
 	cam:draw(camDraw)
 
+	love.graphics.print(hydrant.water, 16, 8)
+	love.graphics.print('gal', 70, 8)
+
 	love.graphics.setColor(128, 255, 255)
-	love.graphics.rectangle('fill', 16, 16, 100*hydrant.water/hydrant.waterMax, 8)
-	love.graphics.rectangle('line', 16, 16, 100, 8)
+	love.graphics.rectangle('fill', 108, 18, 100*hydrant.water/hydrant.waterMax, 10)
+	love.graphics.rectangle('line', 108, 18, 100, 10)
 	love.graphics.setColor(255, 255, 255)
 
 	local dx, dy = hydrant.x - sun.x, hydrant.y - sun.y
@@ -56,11 +62,20 @@ function PlayScreen:draw()
 		love.graphics.draw(indicatorSpr, sw/2 - 160*math.cos(angle), sh/2 - 160*math.sin(angle), angle - math.pi/2, 1, 1, 8, 8)
 	end
 
-	love.graphics.print('ayyy lmao', sw/2, sh/2 + 160)
+	-- local height = -(hydrant.y + hydrant.h/2)
+	-- height = height*height*height/92
+	-- if height < 1000 then
+	-- 	love.graphics.print(string.format('Altitude %i km', height), 16, 32)
+	-- elseif height < 1000000 then
+	-- 	love.graphics.print(string.format('Altitude %i thousand km', height/1000), 16, 32)
+	-- else
+	-- 	love.graphics.print(string.format('Altitude %i million km', height/1000000), 16, 32)
+	-- end
 end
 
 function camDraw()
 	hydrant:draw()
+	moon:draw()
 	sun:draw()
 
 	love.graphics.rectangle('fill', -1000, 0, 2000, 800)

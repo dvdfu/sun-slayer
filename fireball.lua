@@ -34,17 +34,11 @@ function Fireball:update(dt)
 		self.vx, self.vy = delta:unpack()
 	end
 
-	for i, bullet in pairs(hydrant.bullets) do
-		local delta = Vector(bullet.x - self.x, bullet.y - self.y)
-		if delta:len() < self.r/2 + 16 and not bullet.dead then
-			bullet.dead = true
-			self.hp = self.hp - 1
-			self.hit = true
-			if self.hp == 0 then
-				self.dead = true
-			end
-		end
+	local delta = Vector(moon.x - self.x, moon.y - self.y)
+	if delta:len() < moon.r/2 + self.r/2 then
+		self.dead = true
 	end
+
 	self.x, self.y = self.x + self.vx, self.y + self.vy
 end
 
