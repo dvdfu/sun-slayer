@@ -9,20 +9,33 @@ function Moon:initialize()
 	self.size = 80
 	self.r = 240
 	self.dead = false
+
+	local trailSpr = love.graphics.newImage('img/moon-trail.png')
+	self.trail = love.graphics.newParticleSystem(trailSpr, 50)
+	self.trail:setParticleLifetime(0.7)
+
+	self.trail:setColors(255, 255, 255, 255, 255, 255, 255, 0)
+	self.trail:setSizes(3, 3.6)
+	self.trail:setParticleLifetime(0.1, 0.3)
+	self.trail:setSpeed(10, 100)
+	self.trail:setSpread(math.pi*2)
+	self.trail:setEmissionRate(20)
 end
 
 function Moon:update(dt)
+	self.trail:setPosition(self.x, self.y)
+	self.trail:update(dt)
 	local delta = Vector(hydrant.x - self.x, hydrant.y - self.y)
 	if delta:len() < self.r/2 + 16 then
 		local landx, landy = (delta:normalized()*(self.r/2 + 16)):unpack()
 		hydrant.x, hydrant.y = self.x + landx, self.y + landy
-		hydrant.vx, hydrant.vy = 0, 0
-		if love.keyboard.isDown('up') then
+		if love.keyboard.isDown('up') or love.keyboard.isDown('a') then
 			return
 		end
+		hydrant.vx, hydrant.vy = 0, 0
 		hydrant.onMoon = true
 		hydrant.angle = math.atan2(landy, landx) + math.pi/2
-		self.vx, self.vy = 0, 0
+		-- self.vx, self.vy = 0, 0
 	end
 
 	if self.y + self.r/2 > 0 then
@@ -35,6 +48,10 @@ function Moon:update(dt)
 end
 
 function Moon:draw()
+	love.graphics.setBlendMode('additive')
+	love.graphics.draw(self.trail)
+	love.graphics.setBlendMode('alpha')
+
 	love.graphics.draw(self.sprite, self.x, self.y, 0, self.r/self.size, self.r/self.size, self.size/2, self.size/2)
 end
 

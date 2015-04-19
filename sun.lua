@@ -5,10 +5,11 @@ Sun = Class('Sun')
 
 function Sun:initialize()
 	self.sprite = love.graphics.newImage('img/sun.png')
-	self.x, self.y = 4000, -3000
+	self.x, self.y = 2500, -3000
 	self.size = 160
 	self.r = 1024
 	self.hits = 0
+	self.dead = false
 
 	self.fireballs = {}
 	self.fireballTimer = Timer.new()
@@ -19,7 +20,6 @@ function Sun:initialize()
 	self.fire:setSpeed(10, 200)
 	self.fire:setSpread(math.pi*2)
 	self.fire:setColors(255, 255, 0, 255, 255, 128, 0, 255, 255, 0, 0, 0)
-	self.fire:setSizes(6, 7)
 	self.fire:setEmissionRate(20)
 	self.fire:setPosition(self.x, self.y)
 
@@ -62,6 +62,20 @@ function Sun:update(dt)
 		end
 	end
 
+	local delta = Vector(self.x - moon.x, self.y - moon.y)
+	if delta:len() < self.r/2 + moon.r/2 then
+		self.dead = true
+		showSun = false
+	end
+	if self.dead then
+		if self.r > 1 then
+			self.r = self.r * 0.99
+		else
+			self.r = 0
+		end
+	end
+	self.fire:setSizes(self.r/160, self.r/160*1.1)
+
 	local dx, dy = self.x - hydrant.x, self.y - hydrant.y
 	local dist = math.sqrt(dx*dx + dy*dy)
 
@@ -69,7 +83,7 @@ function Sun:update(dt)
 		hydrant:explode()
 	end
 	if dist < 1000 then
-		if self.fireballReady then
+		if self.fireballReady and not self.dead then
 			local fireball = Fireball:new(self.x, self.y, self.r/8)
 			table.insert(self.fireballs, fireball)
 			self.fireballReady = false
@@ -79,10 +93,10 @@ function Sun:update(dt)
 		end
 	end
 
-	if self.hits > 50 and textKey == 'water' then
+	if self.hits > 80 and textKey == 'water' then
 		showText = true
 		textComplete = true
-		text = 'Keep shooting, it\'s working!\n...I think?'
+		text = 'Keep shooting, it\'s working!\n...I think!?'
 		textTimer.add(4, function()
 			textKey = 'confused'
 			textComplete = false
@@ -90,10 +104,10 @@ function Sun:update(dt)
 		end)
 	end
 
-	if self.hits > 100 and textKey == 'confused' then
+	if self.hits > 160 and textKey == 'confused' then
 		showText = true
 		textComplete = true
-		text = 'We need a LOT more water...'
+		text = 'This isn\'t going to work...\nyou need MUCH more water!'
 		textKey = 'moon'
 		textTimer.add(6, function()
 			textComplete = false

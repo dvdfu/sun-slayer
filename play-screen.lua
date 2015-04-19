@@ -95,7 +95,7 @@ function PlayScreen:update(dt)
 			text = 'Remember to refill your water tank\nby landing on Earth (gently).'
 			textKey = 'water'
 			textTimer.add(4, function()
-				text = 'Use your water power to\nEXTINGUISH THE SUN!'
+				text = 'Use your water to\nEXTINGUISH THE SUN!!'
 				showSun = true
 				textTimer.add(4, function()
 					showText = false
@@ -139,6 +139,7 @@ function PlayScreen:draw()
 		local dist = math.sqrt(dx*dx + dy*dy) - moon.r
 		if dist > 200 then
 			local angle = math.atan2(dy, dx)
+			love.graphics.setColor(0, 255, 255)
 			love.graphics.draw(indicatorSpr, sw/2 - 160*math.cos(angle), sh/2 - 160*math.sin(angle), angle - math.pi/2, 1, 1, 8, 8)
 		end
 	end
@@ -148,8 +149,8 @@ function PlayScreen:draw()
 		local angle = math.atan2(dy, dx)
 		love.graphics.setColor(255, 255, 0)
 		love.graphics.draw(indicatorSpr, sw/2 - 160*math.cos(angle), sh/2 - 160*math.sin(angle), angle - math.pi/2, 1, 1, 8, 8)
-		love.graphics.setColor(255, 255, 255)
 	end
+	love.graphics.setColor(255, 255, 255)
 
 	if showText and not showMenu then
 		love.graphics.setColor(0, 0, 0, 192)
