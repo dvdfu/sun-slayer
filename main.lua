@@ -1,5 +1,6 @@
 Class = require 'lib.middleclass'
 PlayScreen = require 'play-screen'
+WinScreen = require 'win-screen'
 
 screens = {}
 
@@ -10,7 +11,7 @@ end
 
 function screens:exitScreen()
 	if screenNum > 1 then
-		screens[screenNum]:onClose()
+		-- screens[screenNum]:onClose()
 		screens[screenNum] = nil
 		screenNum = screenNum - 1
 	end

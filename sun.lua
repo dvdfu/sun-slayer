@@ -10,6 +10,7 @@ function Sun:initialize()
 	self.r = 1024
 	self.hits = 0
 	self.dead = false
+	self.deadTimer = Timer.new()
 
 	self.fireballs = {}
 	self.fireballTimer = Timer.new()
@@ -38,14 +39,25 @@ function Sun:initialize()
 	self.trail:setColors(255, 255, 0, 255, 255, 128, 0, 255, 255, 0, 0, 255, 40, 40, 40, 255)
 	self.trail:setSizes(14, 2)
 
+	local waterSpr = love.graphics.newImage('img/moon-trail.png')
+	self.water = love.graphics.newParticleSystem(part, 5000)
+	self.water:setParticleLifetime(0.5, 2)
+	self.water:setSpeed(100, 700)
+	self.water:setLinearAcceleration(0, 500, 0, 500)
+	self.water:setSpread(math.pi*2)
+	self.water:setColors(128, 255, 255, 255, 0, 128, 255, 255)
+	self.water:setSizes(10, 1)
+
 	self.explodeSound = love.audio.newSource("aud/explode2.wav")
 end
 
 function Sun:update(dt)
 	self.fireballTimer.update(dt)
-	self.fire:update(dt)
+	self.deadTimer.update(dt)
 	self.explosion:update(dt)
 	self.trail:update(dt)
+	self.fire:update(dt)
+	self.water:update(dt)
 
 	for i, fireball in pairs(self.fireballs) do
 		fireball:update(dt)
@@ -63,15 +75,26 @@ function Sun:update(dt)
 	end
 
 	local delta = Vector(self.x - moon.x, self.y - moon.y)
-	if delta:len() < self.r/2 + moon.r/2 then
+	if not self.dead and delta:len() < self.r/2 + moon.r/2 then
 		self.dead = true
+		moon.dead = true
 		showSun = false
+		self.water:setPosition(moon.x, moon.y)
+		self.water:emit(500)
+		self.explodeSound:stop()
+		self.explodeSound:play()
 	end
 	if self.dead then
-		if self.r > 1 then
-			self.r = self.r * 0.99
+		if self.r > 6 then
+			self.r = self.r * 0.96
 		else
 			self.r = 0
+			if won == 0 then
+				self.deadTimer.add(2, function()
+					screens:changeScreen(WinScreen:new())
+				end)
+			end
+			won = won + dt
 		end
 	end
 	self.fire:setSizes(self.r/160, self.r/160*1.1)
@@ -81,6 +104,16 @@ function Sun:update(dt)
 
 	if dist < self.r/2 + 16 and not hydrant.dead then
 		hydrant:explode()
+
+		if textKey == 'moon' then
+			showText = true
+			textComplete = true
+			text = 'This isn\'t going to work...\nyou need MUCH more water!'
+			textTimer.add(6, function()
+				textComplete = false
+				showText = false
+			end)
+		end
 	end
 	if dist < 1000 then
 		if self.fireballReady and not self.dead then
@@ -104,7 +137,7 @@ function Sun:update(dt)
 		end)
 	end
 
-	if self.hits > 160 and textKey == 'confused' then
+	if self.hits > 120 and textKey == 'confused' then
 		showText = true
 		textComplete = true
 		text = 'This isn\'t going to work...\nyou need MUCH more water!'
@@ -120,6 +153,8 @@ function Sun:draw()
 	love.graphics.setBlendMode('additive')
 	love.graphics.draw(self.trail)
 	love.graphics.setBlendMode('alpha')
+
+	love.graphics.draw(self.water)
 	
 	for _, fireball in pairs(self.fireballs) do
 		fireball:draw()

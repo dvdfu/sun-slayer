@@ -1,6 +1,4 @@
-Bump = require 'lib.bump'
 Camera = require 'lib.camera'
-Flux = require 'lib.flux'
 Timer = require 'lib.timer'
 
 PlayScreen = Class('PlayScreen')
@@ -21,6 +19,7 @@ function PlayScreen:initialize()
 	textComplete = false
 	showSun = false
 	showMenu = true
+	won = 0
 
 	showText = true
 
@@ -134,23 +133,25 @@ function PlayScreen:draw()
 		love.graphics.setColor(255, 255, 255)
 	end
 
-	if textKey == 'moon' then
-		local dx, dy = hydrant.x - moon.x, hydrant.y - moon.y
-		local dist = math.sqrt(dx*dx + dy*dy) - moon.r
-		if dist > 200 then
+	if won == 0 then
+		if textKey == 'moon' then
+			local dx, dy = hydrant.x - moon.x, hydrant.y - moon.y
+			local dist = math.sqrt(dx*dx + dy*dy) - moon.r
+			if dist > 200 then
+				local angle = math.atan2(dy, dx)
+				love.graphics.setColor(0, 255, 255)
+				love.graphics.draw(indicatorSpr, sw/2 - 160*math.cos(angle), sh/2 - 160*math.sin(angle), angle - math.pi/2, 1, 1, 8, 8)
+			end
+		end
+		local dx, dy = hydrant.x - sun.x, hydrant.y - sun.y
+		local dist = math.sqrt(dx*dx + dy*dy) - sun.r
+		if showSun and dist > 200 then
 			local angle = math.atan2(dy, dx)
-			love.graphics.setColor(0, 255, 255)
+			love.graphics.setColor(255, 255, 0)
 			love.graphics.draw(indicatorSpr, sw/2 - 160*math.cos(angle), sh/2 - 160*math.sin(angle), angle - math.pi/2, 1, 1, 8, 8)
 		end
+		love.graphics.setColor(255, 255, 255)
 	end
-	local dx, dy = hydrant.x - sun.x, hydrant.y - sun.y
-	local dist = math.sqrt(dx*dx + dy*dy) - sun.r
-	if showSun and dist > 200 then
-		local angle = math.atan2(dy, dx)
-		love.graphics.setColor(255, 255, 0)
-		love.graphics.draw(indicatorSpr, sw/2 - 160*math.cos(angle), sh/2 - 160*math.sin(angle), angle - math.pi/2, 1, 1, 8, 8)
-	end
-	love.graphics.setColor(255, 255, 255)
 
 	if showText and not showMenu then
 		love.graphics.setColor(0, 0, 0, 192)
@@ -158,6 +159,13 @@ function PlayScreen:draw()
 		love.graphics.rectangle('fill', (sw - textw)/2, sh - texth - 16, textw, texth)
 		love.graphics.setColor(255, 255, 255, 255)
 		love.graphics.print(text, sw/2 - font:getWidth(text)/2, sh - texth - font:getHeight()/2)
+	end
+
+	if won > 0 then
+		local alpha = 255*math.min(1, won/2)
+		love.graphics.setColor(10, 0, 20, alpha)
+		love.graphics.rectangle('fill', 0, 0, sw, sh)
+		love.graphics.setColor(255, 255, 255, 255)
 	end
 end
 
@@ -177,9 +185,6 @@ function camDraw()
 	for i = -96, 96, 16 do
 		love.graphics.draw(warningSpr,i - 8, 0, 0, 2, 2)
 	end
-end
-
-function PlayScreen:onClose()
 end
 
 return PlayScreen

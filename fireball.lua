@@ -29,6 +29,16 @@ function Fireball:update(dt)
 		if delta:len() < self.r/2 + 16 then
 			hydrant:explode()
 			self.dead = true
+
+			if textKey == 'moon' then
+				showText = true
+				textComplete = true
+				text = 'This isn\'t going to work...\nyou need MUCH more water!'
+				textTimer.add(6, function()
+					textComplete = false
+					showText = false
+				end)
+			end
 		end
 		delta = delta:normalized() * self.speed
 		self.vx, self.vy = delta:unpack()

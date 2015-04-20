@@ -4,7 +4,7 @@ Moon = Class('Moon')
 
 function Moon:initialize()
 	self.sprite = love.graphics.newImage('img/moon.png')
-	self.x, self.y = -600, -1600
+	self.x, self.y = -500, -1000
 	self.vx, self.vy = 0, 0
 	self.size = 80
 	self.r = 240
@@ -35,7 +35,6 @@ function Moon:update(dt)
 		hydrant.vx, hydrant.vy = 0, 0
 		hydrant.onMoon = true
 		hydrant.angle = math.atan2(landy, landx) + math.pi/2
-		-- self.vx, self.vy = 0, 0
 	end
 
 	if self.y + self.r/2 > 0 then
@@ -48,6 +47,7 @@ function Moon:update(dt)
 end
 
 function Moon:draw()
+	if self.dead then return end
 	love.graphics.setBlendMode('additive')
 	love.graphics.draw(self.trail)
 	love.graphics.setBlendMode('alpha')
